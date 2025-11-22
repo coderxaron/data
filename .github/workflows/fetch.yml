@@ -2,8 +2,9 @@ name: Daily Roblox Data Fetch
 
 on:
   schedule:
-    - cron: "0 20 * * *"   # 21:00 Germany 
-  workflow_dispatch:        
+    # Run at 08:00 and 20:00 Germany time (UTC+1/UTC+2 depending on DST)
+    - cron: "0 8,20 * * *"
+  workflow_dispatch:
 
 jobs:
   fetch-data:
@@ -15,15 +16,19 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq -y
 
-      - name: Fetch Roblox data
+      - name: Fetch Roblox Tester Data
         run: |
           DATE=$(date +'%Y-%m-%d')
           MONTH=$(date +'%Y-%m')
           mkdir -p data
 
-          # Fetch data
-          GAG=$(curl -s https://groups.roblox.com/v1/groups/35789249/roles)
-          PVB=$(curl -s https://groups.roblox.com/v1/groups/34869880/roles)
+          # Fetch raw role data
+          GAG_RAW=$(curl -s https://groups.roblox.com/v1/groups/35789249/roles)
+          PVB_RAW=$(curl -s https://groups.roblox.com/v1/groups/34869880/roles)
+
+          # Extract Tester role counts (replace IDs with the tester role IDs)
+          GAG=$(echo "$GAG_RAW" | jq '.roles[] | select(.id == 350564035) | .memberCount')
+          PVB=$(echo "$PVB_RAW" | jq '.roles[] | select(.id == 532762007) | .memberCount')
 
           # Create JSON entry
           echo "{\"date\":\"$DATE\",\"gag\":$GAG,\"pvb\":$PVB}" > entry.json
@@ -35,7 +40,6 @@ jobs:
 
           # Append entry to monthly JSON
           cat data/$MONTH.json | jq ". += [$(cat entry.json)]" > data/tmp.json
-
           mv data/tmp.json data/$MONTH.json
 
       - name: Commit changes
@@ -43,5 +47,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add data
-          git commit -m "Daily update $(date)"
+          git commit -m "Daily update $(date)" || echo "No changes to commit"
           git push
