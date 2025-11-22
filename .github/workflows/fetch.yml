@@ -1,0 +1,47 @@
+name: Daily Roblox Data Fetch
+
+on:
+  schedule:
+    - cron: "0 20 * * *"   # 21:00 Germany 
+  workflow_dispatch:        
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
+      - name: Fetch Roblox data
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          MONTH=$(date +'%Y-%m')
+          mkdir -p data
+
+          # Fetch data
+          GAG=$(curl -s https://groups.roblox.com/v1/groups/35789249/roles)
+          PVB=$(curl -s https://groups.roblox.com/v1/groups/34869880/roles)
+
+          # Create JSON entry
+          echo "{\"date\":\"$DATE\",\"gag\":$GAG,\"pvb\":$PVB}" > entry.json
+
+          # Ensure monthly file exists
+          if [ ! -f data/$MONTH.json ]; then
+            echo "[]" > data/$MONTH.json
+          fi
+
+          # Append entry to monthly JSON
+          cat data/$MONTH.json | jq ". += [$(cat entry.json)]" > data/tmp.json
+
+          mv data/tmp.json data/$MONTH.json
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data
+          git commit -m "Daily update $(date)"
+          git push
