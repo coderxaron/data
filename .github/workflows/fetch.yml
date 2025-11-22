@@ -1,9 +1,16 @@
 name: Daily Roblox Data Fetch
 
+permissions:
+  contents: write
+
 on:
   schedule:
-    # Run at 08:00 and 20:00 Germany time (UTC+1/UTC+2 depending on DST)
-    - cron: "0 8,20 * * *"
+    # Germany 09:10 → UTC 07:10 (summer) + 08:10 (winter)
+    - cron: "10 7 * * *"
+    - cron: "10 8 * * *"
+    # Germany 21:10 → UTC 19:10 (summer) + 20:10 (winter)
+    - cron: "10 19 * * *"
+    - cron: "10 20 * * *"
   workflow_dispatch:
 
 jobs:
@@ -22,13 +29,13 @@ jobs:
           MONTH=$(date +'%Y-%m')
           mkdir -p data
 
-          # Fetch raw role data
-          GAG_RAW=$(curl -s https://groups.roblox.com/v1/groups/35789249/roles)
-          PVB_RAW=$(curl -s https://groups.roblox.com/v1/groups/34869880/roles)
+          # Fetch group role data
+          GAG_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/35789249/roles)
+          PVB_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/34869880/roles)
 
-          # Extract Tester role counts (replace IDs with the tester role IDs)
-          GAG=$(echo "$GAG_RAW" | jq '.roles[] | select(.id == 350564035) | .memberCount')
-          PVB=$(echo "$PVB_RAW" | jq '.roles[] | select(.id == 532762007) | .memberCount')
+          # Extract tester role counts with safe fallback
+          GAG=$(echo "$GAG_RAW" | jq '.roles[] | select(.id == 350564035) | .memberCount // 0')
+          PVB=$(echo "$PVB_RAW" | jq '.roles[] | select(.id == 532762007) | .memberCount // 0')
 
           # Create JSON entry
           echo "{\"date\":\"$DATE\",\"gag\":$GAG,\"pvb\":$PVB}" > entry.json
@@ -38,8 +45,8 @@ jobs:
             echo "[]" > data/$MONTH.json
           fi
 
-          # Append entry to monthly JSON
-          cat data/$MONTH.json | jq ". += [$(cat entry.json)]" > data/tmp.json
+          # Append safely
+          jq --slurpfile entry entry.json '. + $entry' data/$MONTH.json > data/tmp.json
           mv data/tmp.json data/$MONTH.json
 
       - name: Commit changes
