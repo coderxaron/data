@@ -5,12 +5,12 @@ permissions:
 
 on:
   schedule:
-    # Germany 09:10 → UTC 07:10 (summer) + 08:10 (winter)
-    - cron: "10 7 * * *"
-    - cron: "10 8 * * *"
-    # Germany 21:10 → UTC 19:10 (summer) + 20:10 (winter)
-    - cron: "10 19 * * *"
-    - cron: "10 20 * * *"
+    # Germany 09:35 → UTC 07:35 (summer) + 08:35 (winter)
+    - cron: "35 7 * * *"
+    - cron: "35 8 * * *"
+    # Germany 21:35 → UTC 19:35 (summer) + 20:35 (winter)
+    - cron: "35 19 * * *"
+    - cron: "35 20 * * *"
   workflow_dispatch:
 
 jobs:
