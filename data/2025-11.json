@@ -1,0 +1,189 @@
+[
+  {
+    "date": "2025-11-22",
+    "gag": {
+      "groupId": 35789249,
+      "roles": [
+        {
+          "id": 336398025,
+          "name": "Guest",
+          "rank": 0,
+          "memberCount": 0
+        },
+        {
+          "id": 335782025,
+          "name": "Gardener",
+          "rank": 1,
+          "memberCount": 18046652
+        },
+        {
+          "id": 350564035,
+          "name": "Tester",
+          "rank": 3,
+          "memberCount": 2336
+        },
+        {
+          "id": 381430040,
+          "name": "Contributor",
+          "rank": 3,
+          "memberCount": 2
+        },
+        {
+          "id": 468066007,
+          "name": "Contributor / Friend",
+          "rank": 4,
+          "memberCount": 0
+        },
+        {
+          "id": 350044030,
+          "name": "QA Lead",
+          "rank": 7,
+          "memberCount": 1
+        },
+        {
+          "id": 399800001,
+          "name": "Clark QA Tester",
+          "rank": 15,
+          "memberCount": 9
+        },
+        {
+          "id": 399898001,
+          "name": "Clark QA Lead",
+          "rank": 16,
+          "memberCount": 0
+        },
+        {
+          "id": 447078001,
+          "name": "Audit Log",
+          "rank": 25,
+          "memberCount": 1
+        },
+        {
+          "id": 471524069,
+          "name": "RKorea",
+          "rank": 25,
+          "memberCount": 11
+        },
+        {
+          "id": 357522180,
+          "name": "Analytics",
+          "rank": 53,
+          "memberCount": 3
+        },
+        {
+          "id": 371754141,
+          "name": "analytics2",
+          "rank": 99,
+          "memberCount": 1
+        },
+        {
+          "id": 439408032,
+          "name": "Team #2",
+          "rank": 199,
+          "memberCount": 1
+        },
+        {
+          "id": 348248092,
+          "name": "Developer",
+          "rank": 200,
+          "memberCount": 34
+        },
+        {
+          "id": 573952110,
+          "name": "GHG - TEAM",
+          "rank": 250,
+          "memberCount": 4
+        },
+        {
+          "id": 409886009,
+          "name": "Lead Developer",
+          "rank": 253,
+          "memberCount": 24
+        },
+        {
+          "id": 334688035,
+          "name": "Farmer",
+          "rank": 254,
+          "memberCount": 2
+        },
+        {
+          "id": 334124023,
+          "name": "Owner",
+          "rank": 255,
+          "memberCount": 1
+        }
+      ]
+    },
+    "pvb": {
+      "groupId": 34869880,
+      "roles": [
+        {
+          "id": 140622291,
+          "name": "Guest",
+          "rank": 0,
+          "memberCount": 0
+        },
+        {
+          "id": 141268253,
+          "name": "Yogurter",
+          "rank": 1,
+          "memberCount": 9081252
+        },
+        {
+          "id": 507414111,
+          "name": "Gurt Viewer",
+          "rank": 2,
+          "memberCount": 5
+        },
+        {
+          "id": 532762007,
+          "name": "Tester",
+          "rank": 4,
+          "memberCount": 553
+        },
+        {
+          "id": 524798003,
+          "name": "Contributor",
+          "rank": 5,
+          "memberCount": 4
+        },
+        {
+          "id": 527276046,
+          "name": "MB Fan",
+          "rank": 5,
+          "memberCount": 1
+        },
+        {
+          "id": 527836031,
+          "name": "Based",
+          "rank": 7,
+          "memberCount": 1
+        },
+        {
+          "id": 539888102,
+          "name": "analytics",
+          "rank": 44,
+          "memberCount": 1
+        },
+        {
+          "id": 523556017,
+          "name": "Lead Developer",
+          "rank": 100,
+          "memberCount": 30
+        },
+        {
+          "id": 141576260,
+          "name": "Yogurt King",
+          "rank": 254,
+          "memberCount": 6
+        },
+        {
+          "id": 141714251,
+          "name": "Gurt",
+          "rank": 255,
+          "memberCount": 1
+        }
+      ]
+    }
+  }
+]
