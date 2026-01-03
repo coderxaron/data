@@ -1,0 +1,56 @@
+name: Daily Roblox Data Fetch
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: "15 8 * * *"
+    - cron: "15 9 * * *"
+    - cron: "15 20 * * *"
+    - cron: "15 21 * * *"
+  workflow_dispatch:
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
+      - name: Fetch Roblox Tester Data
+        run: |
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
+          MONTH=$(date +'%Y-%m')
+          mkdir -p data
+
+          GAG_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/35789249/roles)
+          PVB_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/34869880/roles)
+          FORGE_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/35489258/roles)
+          BRAIN_RAW=$(curl -s -H "User-Agent: GitHubAction" https://groups.roblox.com/v1/groups/193446929/roles)
+
+          GAG=$(echo "$GAG_RAW" | jq '.roles[] | select(.id == 350564035) | .memberCount // 0')
+          PVB=$(echo "$PVB_RAW" | jq '.roles[] | select(.id == 532762007) | .memberCount // 0')
+
+          FORGE_QA=$(echo "$FORGE_RAW" | jq '.roles[] | select(.id == 269434048) | .memberCount // 0')
+          BRAIN_TESTER=$(echo "$BRAIN_RAW" | jq '.roles[] | select(.id == 606510073) | .memberCount // 0')
+
+          echo "{\"timestamp\":\"$TIMESTAMP\",\"gag\":$GAG,\"pvb\":$PVB,\"forgeQA\":$FORGE_QA,\"brainTester\":$BRAIN_TESTER}" > entry.json
+
+          if [ ! -f data/$MONTH.json ]; then
+            echo "[]" > data/$MONTH.json
+          fi
+
+          jq --slurpfile entry entry.json '. + $entry' data/$MONTH.json > data/tmp.json
+          mv data/tmp.json data/tmp.json
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data
+          git commit -m "Daily update $(date)" || echo "No changes to commit"
+          git push
