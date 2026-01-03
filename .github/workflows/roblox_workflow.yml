@@ -45,7 +45,7 @@ jobs:
           fi
 
           jq --slurpfile entry entry.json '. + $entry' data/$MONTH.json > data/tmp.json
-          mv data/tmp.json data/tmp.json
+          mv data/tmp.json data/$MONTH.json
 
       - name: Commit changes
         run: |
